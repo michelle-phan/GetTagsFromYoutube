@@ -13,7 +13,7 @@ object GetTags {
 
     import spark.implicits._
     val df = spark.read.format("csv").option("header", "true").load("hdfs://localhost:9000/datalake/preprocessed/youtube/top100Videos.csv")
-    df.filter($"country" === "US").select("tags").repartition(1).write.format("com.databricks.spark.csv").option("header", "false").save("/opt/flume/data/keywordsTmp.csv")
+    df.filter($"country" === "US" && $"tags".isNotNull).select("tags").repartition(1).write.format("com.databricks.spark.csv").option("header", "false").save("/opt/flume/data/keywordsTmp.csv")
     
     val hadoopConfig = new Configuration()
     val hdfs = FileSystem.get(hadoopConfig)
